@@ -7,7 +7,7 @@ class Field;
 class Cell{
 private:
     bool possibility;
-    bool playerOnCell;
+    bool playerOnCell = false;
     Event* event = nullptr;
 public:
     void setPossibility(bool possibility);

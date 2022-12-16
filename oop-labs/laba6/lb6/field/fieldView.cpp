@@ -11,7 +11,7 @@ void fieldView::printField() {
         std::cout << "|";
         for (int k = 0; k < field->getWidth(); ++k)
             std::cout << cellView(field->getCells().at(j).at(k)).getOption() << "  ";
-        std::cout << " |\n"; // можно убрать пробел
+        std::cout << " |\n";
     }
     for (int i = 0; i <= field->getWidth(); i++)
         std::cout << " - ";

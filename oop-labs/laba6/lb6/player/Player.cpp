@@ -57,18 +57,21 @@ void Player::setState(std::string str) {
             if (!isReadHash) {
                 hashFromFile = line;
                 isReadHash = true;
+            } else {
+                data.push_back(std::stoi(line));
             }
-            data.push_back(std::stoi(line));
         }
     } catch (...){
+        std::cout << "Data file error\n";
         throw std::invalid_argument("poo");
     }
+    std::cout << std::to_string(data[0]) << '\t' << std::to_string(data[1]) << '\t' << std::to_string(data[2]) << '\n';
     if (hashFromFile == std::to_string(hash(data[0], data[1], data[2]))){
         restoredData = data;
     } else if (data.size() != TOTALVAL) {
+        std::cout << "Hash error\n";
         throw std::invalid_argument("poo");
-    }
-    else {
+    } else {
         throw std::invalid_argument("poo");
     }
 }

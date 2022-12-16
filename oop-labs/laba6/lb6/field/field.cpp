@@ -75,10 +75,16 @@ void Field::playerMove(Player::Step move) {
             tempCoord.first++;
             break;
         case Player::LOAD:
+            std::cout << "LOAD game \n";
             saveGame();
+            playerPos(playerCoordinates.first, playerCoordinates.second);
+            return;
             break;
         case Player::RESTORE:
+            std::cout << "Restore game\n";
             restoreGame();
+            playerPos(playerCoordinates.first, playerCoordinates.second);
+            return;
             break;
         default:
             break;
@@ -152,7 +158,7 @@ std::string Field::getState() {
             if (cells.at(h).at(w).getEvent() != nullptr){
                 if (eventToString.find(cells.at(h).at(w).getEvent()->getHash()) == eventToString.end()) fieldParams += "None\n";
                 else fieldParams += eventToString.at(cells.at(h).at(w).getEvent()->getHash()) + '\n';
-            } else fieldParams += "None\n";
+            } else fieldParams += std::to_string(cells.at(h).at(w).getPossibility()) + '\n';
         }
     }
     return fieldParams;
@@ -166,7 +172,6 @@ void Field::setState(std::string str) {
     std::string hashFromFile;
     int count = 0;
     std::vector<std::vector<Cell>> cellsRestore;
-    cellsRestore.emplace_back();
     int h = 0;
     int w = 0;
     try {
@@ -175,19 +180,29 @@ void Field::setState(std::string str) {
                 hashFromFile = line;
                 isReadHash = true;
                 continue;
-            }
-            if (count < 4) data.push_back(std::stoi(line));
-            else {
-                cellsRestore.at(h).emplace_back();
-                if (line != "None") {
-                    cellsRestore.at(h).at(w).setEvent(stringToEvent.at(line)());
+            }else {
+                if (count < 4){
+                    data.push_back(std::stoi(line));
+                    ++count;
+                    if(count  == 4){
+                        std::cout << data[0] << '\t' << data[1] << '\t' << data[2] << '\t' << data[3] << '\n';
+                        break;
+                    }
                 }
             }
-            ++w;
-            int tmp_h = h;
-            h += w / data[0];
-            if (tmp_h != h) cellsRestore.emplace_back();
-            w %= data[0];
+        }
+        for (int i = 0; i < data[0]; ++i) {
+            cellsRestore.emplace_back();
+            for (int j = 0; j < data[1]; ++j) {
+                std::string current_cell;
+                std::getline(ss, current_cell, '\n');
+                Cell new_cell;
+                if (current_cell == "0" or current_cell == "1"){
+                    new_cell.setPossibility(current_cell == "1");
+                } else if(current_cell != "None")
+                    new_cell.setEvent(stringToEvent[current_cell]());
+                cellsRestore.at(i).push_back(new_cell);
+            }
         }
     } catch (...){
         throw std::invalid_argument("poo");
@@ -206,7 +221,9 @@ size_t Field::hash(int width, int height, std::pair<int, int> playerCoordinates,
     size_t hashCells = size_t(0);
     for (int h = 0; h < height; ++h){
         for (int w = 0; w < width; ++w){
-            if (cells.at(h).at(w).getEvent() != nullptr) {
+            if (cells.at(h).at(w).getPossibility() == true){
+                hashCells += w<<h;
+            }else if (cells.at(h).at(w).getEvent() != nullptr) {
                 hashCells += cells.at(h).at(w).getEvent()->getHash();
             }
         }
@@ -224,19 +241,27 @@ void Field::restoreState() {
     cells.clear();
     width = std::get<0>(restoredData);
     height = std::get<1>(restoredData);
-    playerCoordinates = std::get<2>(restoredData);
+    //playerCoordinates = std::get<2>(restoredData);d
     cells = std::get<3>(restoredData);
+    std::cout << "p:" << playerCoordinates.first << "-" << playerCoordinates.second;
+    playerPos( std::get<2>(restoredData).first,  std::get<2>(restoredData).second);
+    std::cout << "p:" << playerCoordinates.first << "-" << playerCoordinates.second;
 }
 
 
 void Field::restoreGame() {
     Memento memento;
     try{
+        std::cout << "Rstore player\n";
         player->setState(memento.restoreState(FILESAVEPLAYER));
+        std::cout << "Rstore field\n";
         setState(memento.restoreState(FILESAVEFIELD));
+        std::cout << "player use data\n";
         player->restoreState();
+        std::cout << "field use data\n";
         restoreState();
     } catch (...) {
+        std::cout << "Error restore field or player\n";
         std::invalid_argument("poo");
     }
 }

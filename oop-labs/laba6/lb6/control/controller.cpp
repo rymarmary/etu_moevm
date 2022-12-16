@@ -4,7 +4,6 @@ Controller::Controller() : viewField(nullptr) {}
 
 
 void Controller::setStep(Player::Step step) {
-    if (step == Player::LOAD) std::cout << '+';
     context.getField()->playerMove(step);
 }
 
