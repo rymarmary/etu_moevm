@@ -1,0 +1,23 @@
+rymarmary@rymarmary:~/rymar$ gcc prog1.c -o first
+rymarmary@rymarmary:~/rymar$ gcc prog2.c -o second
+rymarmary@rymarmary:~/rymar$ ./first &
+[3] 92
+rymarmary@rymarmary:~/rymar$ 5
+[3]   Done                    ./first
+rymarmary@rymarmary:~/rymar$ ./second &
+[3] 93
+rymarmary@rymarmary:~/rymar$ ps -d
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init(Ubuntu)
+    4 ?        00:00:00 init
+    9 ?        00:00:00 Relay(10)
+   72 pts/0    00:00:00 second
+   74 pts/0    00:00:00 second
+   93 pts/0    00:00:00 second
+   94 pts/0    00:00:00 ps
+
+[3]+  Stopped                 ./second
+rymarmary@rymarmary:~/rymar$ jobs
+[1]   Stopped                 ./second
+[2]-  Stopped                 ./second
+[3]+  Stopped                 ./second
