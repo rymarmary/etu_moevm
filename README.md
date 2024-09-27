@@ -9,16 +9,16 @@
    *branch: AlgsDS, AlgsDS_coursework*<br>
    *language: Python*
 3. Design and Analysis of Algorithms / 4th semester - labs<br>
-   *branch: __* <br>
-   *language: __*
+   *branch: DAA* <br>
+   *language: C++, Python*
 4. Computer Architecture / 3rd semester - labs<br>
-   *branch: __* <br>
-   *language: __*
-5. Nets / 4th semester - labs<br>
+   *branch: ComArchAssembly* <br>
+   *language: Assembly*
+5. Networks and telecomunications / 4th semester - labs<br>
    *branch: Nets*
-6. Computer Maths / 3rd semester - labs<br>
-   *branch: __* <br>
-   *language: __*
-7. OS / 4th semester - labs <br>
-   *branch: __* <br>
+6. Computer Maths / 3rd, 4th semesters - labs<br>
+   *branch: compmath* <br>
+   *language: Python*
+7. Operating Systems / 4th semester - labs <br>
+   *branch: OS*
     
